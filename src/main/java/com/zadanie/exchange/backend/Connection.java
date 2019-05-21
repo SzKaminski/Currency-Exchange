@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class Connection {
 
-    public static void main(String[] args) throws IOException {
+    public static Map getValuesMap() throws IOException {
 
         String text = getTextFromUrl(
                 new URL("https://openexchangerates.org/api/latest.json?app_id=2885673c4858427abcacbe349a582fbc&prettyprint=0")
@@ -21,8 +21,7 @@ public class Connection {
         Map<String, Object> jsonFileAsMap = new ObjectMapper().readValue(text, new TypeReference<Map<String, Object>>() {
         });
 
-        Map<String, Object> ratesMap = (Map<String, Object>) jsonFileAsMap.get("rates");
-        ratesMap.forEach((k, v) -> System.out.println("Key = " + k + ", Value = " + v));
+        return (Map<String, Object>) jsonFileAsMap.get("rates");
     }
 
     private static String getTextFromUrl(URL url) throws IOException {
