@@ -8,7 +8,7 @@ import {ExchangeService} from "../shared/exchange/exchange.service";
   styleUrls: ['./exchange.component.css']
 })
 export class ExchangeComponent implements OnInit {
-  private currencies: ObjectExchange;
+  private currencies: Set<any>;
 
   constructor(public exchangeService: ExchangeService) {
   }
@@ -19,19 +19,13 @@ export class ExchangeComponent implements OnInit {
     })
   }*/
   ngOnInit() {
-    /*this.exchangeService.getMap().subscribe(data => {
-      this.currencies = data;
-      console.log(data.parameters)
-    }*/
-
-    this.exchangeService.getAll().subscribe(data => {
+    this.exchangeService.getMap().subscribe(data =>{
       this.currencies = data;
     })
   }
 
   firstCurrency: string;
   secondCurrency: string;
-
 
   setFirstCurrency(value: string) {
     this.firstCurrency = value;
@@ -40,32 +34,6 @@ export class ExchangeComponent implements OnInit {
   setSecondCurrency(value: string) {
     this.secondCurrency = value;
   }
+
+
 }
-
-export interface JsonResponse {
-  parameters: { [name: string]: number };
-}
-
-export class ObjectExchange {
-  parameters: Map<string, number>;
-
-  constructor(json: JsonResponse) {
-    this.parameters = new Map<string, number>();
-    Object.keys(json.parameters).forEach(key => {
-      this.addParameter(key, json.parameters[key]);
-    });
-  }
-
-  addParameter(key: string, value: number) {
-    this.parameters.set(key, value);
-  }
-
-  getParameters() {
-    return this.parameters;
-  }
-}
-
-/*name: Set<string>;
-rate: number;
-}*/
-
