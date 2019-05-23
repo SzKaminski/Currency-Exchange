@@ -1,10 +1,9 @@
 <div>
-
   <div class="from">
     From
   </div>
   <div>
-    <select class="selector" #selectElem (change)="setCurrency(selectElem.value)">
+    <select class="selector" #selectElem (change)="setFirstCurrency(selectElem.value)">
       <option *ngFor="let currency of currencies">{{currency}}</option>
     </select>
   </div>
@@ -12,11 +11,11 @@
     to
   </div>
   <div>
-    <select class="selector" #selectElem (change)="setSecondCurrency(selectElem.value)">
+    <select class="selector" #secSelectElem (change)="setSecondCurrency(secSelectElem.value)">
       <option *ngFor="let currency of currencies">{{currency}}</option>
     </select>
   </div>
-  
+
   <div class="exchanger">
     <div class="exchanger100">
       100
