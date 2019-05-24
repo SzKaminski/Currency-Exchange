@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ExchangeService} from "../shared/exchange/exchange.service";
+import {HttpClient} from "@angular/common/http";
 
 
 @Component({
@@ -8,32 +9,33 @@ import {ExchangeService} from "../shared/exchange/exchange.service";
   styleUrls: ['./exchange.component.css']
 })
 export class ExchangeComponent implements OnInit {
-  private currencies: Set<any>;
+  public currencies: Set<any>;
 
-  constructor(public exchangeService: ExchangeService) {
+  constructor(public exchangeService: ExchangeService, private http: HttpClient) {
   }
 
-  /*ngOnInit() {
-    this.exchangeService.getAll().subscribe(data => {
-      this.currencies = data;
-    })
-  }*/
   ngOnInit() {
-    this.exchangeService.getMap().subscribe(data =>{
+    this.exchangeService.getMap().subscribe(data => {
       this.currencies = data;
+      console.log()
     })
+
   }
 
-  firstCurrency: string;
-  secondCurrency: string;
+  private firstCurrency: string;
+  private secondCurrency: string;
 
   setFirstCurrency(value: string) {
     this.firstCurrency = value;
-  }
+  }//KVIBWDX90RUCR3PW
 
   setSecondCurrency(value: string) {
     this.secondCurrency = value;
   }
 
-
+  save() {
+    this.exchangeService.postJSON(this.firstCurrency,this.secondCurrency);
+  }
 }
+
+

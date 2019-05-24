@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable, throwError} from "rxjs";
-import {map, catchError} from "rxjs/operators";
+import {catchError, map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +25,12 @@ export class ExchangeService {
         }), catchError(error => {
           return throwError('Something went wrong!')
         })
-  )
+  )}
+
+  postJSON(firstCurrency: string, secondCurrency: string){
+    var json = JSON.stringify({firstCur: firstCurrency, secondCur: secondCurrency});
+    console.log(this.http.post("localhost:8080/exchangeCurrencies", json));
+    return this.http.post("localhost:8080/exchangeCurrencies", json)
   }
 
 }
