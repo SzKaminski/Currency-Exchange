@@ -20,12 +20,6 @@ public class Controller {
     public Map getCurrencyMap() throws IOException {
         return connectionService.getValuesMap();
     }
-/*
-    @GetMapping("/exchangeCurrencies")
-    @CrossOrigin(origins = "http://localhost:4200")
-    public String getCurrencyKeyList() {
-        return connectionService.getRealtimeCurrencyExchangeRate();
-    }*/
 
     @GetMapping("/exchangeCurrencies")
     @CrossOrigin(origins = "http://localhost:4200")
@@ -35,15 +29,9 @@ public class Controller {
 
     @PostMapping("/exchangeCurrencies")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Currencies find(@RequestBody Currencies currencies){
-        return currencies;
-    }
-
-  /*  @GetMapping("/post")
     @CrossOrigin(origins = "http://localhost:4200")
-    public String get(){
-        return
-    }*/
-
+    public String find(@RequestBody Currencies currencies){
+        return connectionService.getRealtimeCurrencyExchangeRate(currencies);
+    }
 }
 
