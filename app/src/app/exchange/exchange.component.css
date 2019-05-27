@@ -1,0 +1,67 @@
+.from{
+  float: left;
+  margin: 15px 50px 15px 15px;
+  font-size: 25px;
+  height: 35px;
+  padding: 0;
+}
+
+.exchanger{
+  float: right;
+  height: 235px;
+  width: 40%;
+  border: 1px solid royalblue;
+  box-shadow: 3px 3px 3px grey;
+}
+
+.exchanger100{
+  float: left;
+  margin: 35px 5px 5px 5px;
+  font-size: 45px;
+  width: 70px;
+  height: 50px;
+  border: 4px solid black;
+  box-shadow: 3px 3px 3px grey;
+
+}
+.label{
+  margin: 35px 5px 5px 125px;
+  color: grey;
+}
+
+.currency-rate{
+  font-size: 35px;
+  margin: 20px 15px 15px 135px;
+  border-bottom: 1px solid grey;
+}
+
+.actual-currencies{
+  margin-left: 135px;
+  font-size: 20px;
+  color: royalblue;
+}
+
+.actual-currencies div{
+  float: left;
+  margin: 5px 5px 5px 5px;
+}
+
+.button {
+  background-color: white;
+  width: 100%;
+  height: 100%;
+  color: black;
+  border: 2px solid white;
+  font-size: 30px;
+}
+
+
+.selector{
+  border-bottom-color: royalblue;
+  margin-top: 15px;
+  width: 150px;
+  float: left;
+  font-size: 25px;
+  box-shadow: 3px 3px 3px grey;
+
+}
