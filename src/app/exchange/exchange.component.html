@@ -13,11 +13,14 @@
     to
   </div>
   <div>
-    <select class="selector" #secSelectElem (change)="setSecondCurrency(secSelectElem.value)" (click)="save()">
+    <select class="selector" #secSelectElem (change)="setSecondCurrency(secSelectElem.value)">
       <option *ngFor="let currency of currencies | keyvalue">
         {{currency.key}}
       </option>
     </select>
+    <button (click)= "save()">
+      SAVE
+    </button>
   </div>
 
   <div class="exchanger">
@@ -28,7 +31,7 @@
       Real-time exchange rate
     </div>
     <div class="currency-rate">
-
+      |{{rateResponse}}
     </div>
     <div class="actual-currencies">
       <div>{{firstCurrency}}</div>

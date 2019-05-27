@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHandler, HttpHeaders} from "@angular/common/http";
 import {Observable, throwError} from "rxjs";
 import {catchError, map} from "rxjs/operators";
+import {Curries} from "../../exchange/exchange.component";
 
 @Injectable({
   providedIn: 'root'
@@ -27,10 +28,22 @@ export class ExchangeService {
         })
   )}
 
-  postJSON(firstCurrency: string, secondCurrency: string){
+  /*postJSON(firstCurrency: string, secondCurrency: string){
     var json = JSON.stringify({firstCur: firstCurrency, secondCur: secondCurrency});
-    console.log(this.http.post("localhost:8080/exchangeCurrencies", json));
-    return this.http.post("localhost:8080/exchangeCurrencies", json)
+    console.log(json);
+    return this.http.post("//localhost:8080/exchangeCurrencies", json)
+  }*/
+
+
+  postJSON (curries: Curries): Observable<Curries>{
+    return this.http.post<Curries>("//localhost:8080/exchangeCurrencies",curries,{
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    })
+      //.
   }
 
 }
+
+
