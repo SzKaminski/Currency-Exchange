@@ -2,6 +2,7 @@ package com.zadanie.exchange.backend.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zadanie.exchange.backend.model.ChartPoint;
 import com.zadanie.exchange.backend.model.Currencies;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -13,9 +14,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ConnectionService {
@@ -53,10 +52,10 @@ public class ConnectionService {
         return scanner.nextLine();
     }
 
-    public static String getStringByCurrenciesAndFunction(String firstCurrency, String secondCurrency, String function) throws IOException {
+    public static String getStringByCurrenciesAndFunction(String firstCurrency, String secondCurrency) throws IOException {
         StringBuilder sb = new StringBuilder()
                 .append("https://www.alphavantage.co/query?function=")
-                .append(function)
+                .append("CURRENCY_EXCHANGE_RATE")
                 .append("&from_currency=")
                 .append(firstCurrency)
                 .append("&to_currency=")
@@ -67,13 +66,14 @@ public class ConnectionService {
 
     }
 
-    public String getRealtimeCurrencyExchangeRate(Currencies currencies, String objFromJson, String key, String function) {
+    public String getRealtimeCurrencyExchangeRate(Currencies currencies, String objFromJson, String key) {
         String exchange_rateString = null;
         try {
             String firstCurrency = currencies.getFirstCur();
             String secondCurrency = currencies.getSecondCur();
-            URL obj = new URL(getStringByCurrenciesAndFunction(firstCurrency, secondCurrency, function));
-            JSONObject obj_JSONObject = getJsonObject(obj);
+            URL obj = new URL(getStringByCurrenciesAndFunction(firstCurrency, secondCurrency));
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            JSONObject obj_JSONObject = getJsonObject(obj, con);
             JSONObject realtime_currency_exchange_rate = obj_JSONObject.getJSONObject(objFromJson);
 
             exchange_rateString = realtime_currency_exchange_rate.getString(key);
@@ -85,8 +85,8 @@ public class ConnectionService {
         return exchange_rateString;
     }
 
-    private JSONObject getJsonObject(URL obj) throws IOException {
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+    private JSONObject getJsonObject(URL obj, HttpURLConnection con) throws IOException {
+
         con.setRequestMethod("GET");
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream()));
@@ -104,28 +104,32 @@ public class ConnectionService {
         return textFromURL;
     }
 
-    public String getHistoricalChart(Currencies currencies) {
+    public List<ChartPoint> getHistoricalChart(Currencies currencies) {
 
         try {
             String firstCurrency = currencies.getFirstCur();
             String secondCurrency = currencies.getSecondCur();
             URL obj = new URL("https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=EUR&to_symbol=USD&outputsize=full&apikey=KVIBWDX90RUCR3PW");
-            JSONObject obj_JSONObject = getJsonObject(obj);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            JSONObject obj_JSONObject = getJsonObject(obj, con);
             JSONObject realtime_currency_exchange_rate = obj_JSONObject.getJSONObject("Time Series FX (Daily)");
-            while (realtime_currency_exchange_rate.toMap().keySet().iterator().hasNext()) {
-                JSONObject jsonObject = realtime_currency_exchange_rate.getJSONObject(realtime_currency_exchange_rate.toMap().keySet().iterator().next());
-                System.out.println(jsonObject);
-                String exchange_rateString = jsonObject.getString("2. high");
 
-                return exchange_rateString;
-            }
+            List<ChartPoint> chartpoints = new ArrayList<>();
+            realtime_currency_exchange_rate.toMap().forEach((x, y) -> {
+                ChartPoint cp = new ChartPoint();
+                cp.setDateTime(x);
+                cp.setHighRate(y);
+                chartpoints.add(cp);
+            });
+            /*
+                exchange_rateString = jsonObject.getString("2. high");
+            */
+
+            return chartpoints;
         } catch (Exception e) {
             // TODO: handle exception
         }
 
-        return "smtwentwrong";
-        /*return getRealtimeCurrencyExchangeRate(currencies,
-                "Time Series FX (Daily)"
-        );*/
+        return null;
     }
 }

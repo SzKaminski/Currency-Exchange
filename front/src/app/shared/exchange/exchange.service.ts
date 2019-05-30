@@ -26,22 +26,25 @@ export class ExchangeService {
         }), catchError(error => {
           return throwError('Something went wrong!')
         })
-  )}
-
-  /*postJSON(firstCurrency: string, secondCurrency: string){
-    var json = JSON.stringify({firstCur: firstCurrency, secondCur: secondCurrency});
-    console.log(json);
-    return this.http.post("//localhost:8080/exchangeCurrencies", json)
-  }*/
+      )
+  }
 
 
-  postJSON (curries: Curries): Observable<Curries>{
-    return this.http.post<Curries>("//localhost:8080/exchangeCurrencies",curries,{
+  postJsonForChart(curries: Curries): Observable<Curries> {
+    return this.http.post<Curries>("//localhost:8080/historicalChart", curries, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
     })
-      //.
+  }
+
+
+  postJSON(curries: Curries): Observable<Curries> {
+    return this.http.post<Curries>("//localhost:8080/exchangeCurrencies", curries, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    })
   }
 
 }
