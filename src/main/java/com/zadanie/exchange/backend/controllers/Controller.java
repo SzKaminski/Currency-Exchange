@@ -30,8 +30,18 @@ public class Controller {
     @PostMapping("/exchangeCurrencies")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @CrossOrigin(origins = "http://localhost:4200")
-    public String find(@RequestBody Currencies currencies){
-        return connectionService.getRealtimeCurrencyExchangeRate(currencies);
+    public String findByCurrencies(@RequestBody Currencies currencies){
+        return connectionService.getRealtimeCurrencyExchangeRate(currencies,
+                "Realtime Currency Exchange Rate",
+                "5. Exchange Rate",
+                "CURRENCY_EXCHANGE_RATE");
+    }
+
+    @PostMapping("/historicalChart")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @CrossOrigin(origins = "http://locahost:4200")
+    public String findByCurrenciesTohistoricalChart(@RequestBody Currencies currencies){
+        return connectionService.getHistoricalChart(currencies);
     }
 }
 

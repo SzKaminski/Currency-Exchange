@@ -13,14 +13,11 @@
     to
   </div>
   <div>
-    <select class="selector" #secSelectElem (change)="setSecondCurrency(secSelectElem.value)">
+    <select class="selector" #secSelectElem (change)="setSecondCurrency(secSelectElem.value)" (click)= "save()">
       <option *ngFor="let currency of currencies | keyvalue">
         {{currency.key}}
       </option>
     </select>
-    <button (click)= "save()">
-      SAVE
-    </button>
   </div>
 
   <div class="exchanger">

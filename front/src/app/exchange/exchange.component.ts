@@ -21,9 +21,9 @@ export class ExchangeComponent implements OnInit {
     })
   }
 
-  private firstCurrency: string;
-  private secondCurrency: string;
-  private rateResponse: Curries;
+  public firstCurrency: string;
+  public secondCurrency: string;
+  public rateResponse: Curries;
 
   setFirstCurrency(value: string) {
     this.firstCurrency = value;

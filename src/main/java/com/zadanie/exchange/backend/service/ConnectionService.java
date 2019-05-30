@@ -35,7 +35,7 @@ public class ConnectionService {
 
     private static String getTextFromURL(URL url) throws IOException {
         URLConnection connection = url.openConnection();
-        try (InputStream inputStream = connection.getInputStream()){
+        try (InputStream inputStream = connection.getInputStream()) {
             Scanner sc = new Scanner(inputStream);
             return sc.nextLine();
         }
@@ -53,9 +53,11 @@ public class ConnectionService {
         return scanner.nextLine();
     }
 
-    public static String getStringByCurrencies(String firstCurrency, String secondCurrency) throws IOException {
+    public static String getStringByCurrenciesAndFunction(String firstCurrency, String secondCurrency, String function) throws IOException {
         StringBuilder sb = new StringBuilder()
-                .append("https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=")
+                .append("https://www.alphavantage.co/query?function=")
+                .append(function)
+                .append("&from_currency=")
                 .append(firstCurrency)
                 .append("&to_currency=")
                 .append(secondCurrency)
@@ -65,28 +67,16 @@ public class ConnectionService {
 
     }
 
-    public String getRealtimeCurrencyExchangeRate(Currencies currencies) {
+    public String getRealtimeCurrencyExchangeRate(Currencies currencies, String objFromJson, String key, String function) {
         String exchange_rateString = null;
-        System.out.println(currencies);
         try {
             String firstCurrency = currencies.getFirstCur();
             String secondCurrency = currencies.getSecondCur();
-            URL obj = new URL(getStringByCurrencies(firstCurrency, secondCurrency));
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            con.setRequestMethod("GET");
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-            JSONObject obj_JSONObject = new JSONObject(response.toString());
+            URL obj = new URL(getStringByCurrenciesAndFunction(firstCurrency, secondCurrency, function));
+            JSONObject obj_JSONObject = getJsonObject(obj);
+            JSONObject realtime_currency_exchange_rate = obj_JSONObject.getJSONObject(objFromJson);
 
-            JSONObject realtime_currency_exchange_rate = obj_JSONObject.getJSONObject("Realtime Currency Exchange Rate");
-
-            exchange_rateString = realtime_currency_exchange_rate.getString("5. Exchange Rate");
+            exchange_rateString = realtime_currency_exchange_rate.getString(key);
             return exchange_rateString;
 
         } catch (Exception e) {
@@ -95,8 +85,47 @@ public class ConnectionService {
         return exchange_rateString;
     }
 
+    private JSONObject getJsonObject(URL obj) throws IOException {
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        con.setRequestMethod("GET");
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        return new JSONObject(response.toString());
+    }
+
     public String getJson() throws IOException {
         String textFromURL = getTextFromURL(new URL("http://localhost:4200/"));
         return textFromURL;
+    }
+
+    public String getHistoricalChart(Currencies currencies) {
+
+        try {
+            String firstCurrency = currencies.getFirstCur();
+            String secondCurrency = currencies.getSecondCur();
+            URL obj = new URL("https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=EUR&to_symbol=USD&outputsize=full&apikey=KVIBWDX90RUCR3PW");
+            JSONObject obj_JSONObject = getJsonObject(obj);
+            JSONObject realtime_currency_exchange_rate = obj_JSONObject.getJSONObject("Time Series FX (Daily)");
+            while (realtime_currency_exchange_rate.toMap().keySet().iterator().hasNext()) {
+                JSONObject jsonObject = realtime_currency_exchange_rate.getJSONObject(realtime_currency_exchange_rate.toMap().keySet().iterator().next());
+                System.out.println(jsonObject);
+                String exchange_rateString = jsonObject.getString("2. high");
+
+                return exchange_rateString;
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+        return "smtwentwrong";
+        /*return getRealtimeCurrencyExchangeRate(currencies,
+                "Time Series FX (Daily)"
+        );*/
     }
 }
