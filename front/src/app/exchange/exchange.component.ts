@@ -76,6 +76,17 @@ export class ExchangeComponent implements OnInit {
       console.log(this.rateResponse);
     });
   }
+
+  getChartData() {
+    this.curries = {
+      firstCur: this.firstCurrency,
+      secondCur: this.secondCurrency,
+    };
+    this.exchangeService.postJsonForChart(this.curries).subscribe(data => {
+      this.rateResponse = data;
+      console.log(this.rateResponse);
+    });
+  }
 }
 
 export interface Curries {

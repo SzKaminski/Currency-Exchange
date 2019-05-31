@@ -29,16 +29,6 @@ export class ExchangeService {
       )
   }
 
-
-  postJsonForChart(curries: Curries): Observable<Curries> {
-    return this.http.post<Curries>("//localhost:8080/historicalChart", curries, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    })
-  }////localhost:8080/historicalChart
-
-
   postJSON(curries: Curries): Observable<Curries> {
     return this.http.post<Curries>("//localhost:8080/exchangeCurrencies", curries, {
       headers: new HttpHeaders({
@@ -47,6 +37,13 @@ export class ExchangeService {
     })
   }
 
+  postJsonForChart(curries: Curries): Observable<Curries> {
+    return this.http.post<Curries>("//localhost:8080/historicalChart", curries, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    })
+  }////localhost:8080/historicalChart
 }
 
 
