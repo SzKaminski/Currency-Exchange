@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ExchangeService} from "../shared/exchange/exchange.service";
-
+import {Chart} from 'chart.js';
 
 @Component({
   selector: 'app-exchange',
@@ -18,8 +18,39 @@ export class ExchangeComponent implements OnInit {
     this.exchangeService.getMap().subscribe(data => {
       this.currencies = data;
       console.log()
+    });
+
+
+    this.LineChart = new Chart('lineChart',{
+      type: 'line',
+
+      data: {
+        labels: ["Jan","Feb","March"],
+        datasets: [{
+          data: [9, 4, 14],
+          lineTension: 0.2,
+          borderColor: "red",
+          borderWidth: 1
+        }]
+      },
+      options: {
+        title: {
+          text:"line",
+          display:true
+        },
+        scales:{
+          yAxes:[{
+            ticks:{
+              beginAtZero: true
+            }
+          }]
+        }
+      }
     })
   }
+
+  LineChart = [];
+
 
   public firstCurrency: string;
   public secondCurrency: string;

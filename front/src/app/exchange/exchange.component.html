@@ -13,7 +13,7 @@
     to
   </div>
   <div>
-    <select class="selector" #secSelectElem (change)="setSecondCurrency(secSelectElem.value)" (click)= "save()">
+    <select class="selector" #secSelectElem (change)="setSecondCurrency(secSelectElem.value)" (click)="save()">
       <option *ngFor="let currency of currencies | keyvalue">
         {{currency.key}}
       </option>
@@ -39,5 +39,22 @@
       </div>
       <div>{{secondCurrency}}</div>
     </div>
+  </div>
+</div>
+
+<div>
+  <div class="chartR">
+    <table>
+      <tr>
+        <td style="width: 100%">
+          <canvas id="lineChart"></canvas>
+        </td>
+        <td style="width: 100%"></td>
+      </tr>
+    </table>
+    Historical exchange chart!
+    <button (click)=getChartData()>
+      BUTTON
+    </button>
   </div>
 </div>

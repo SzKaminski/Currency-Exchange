@@ -63,5 +63,17 @@
   float: left;
   font-size: 25px;
   box-shadow: 3px 3px 3px grey;
+  margin-bottom: 255px;
+
+}
+
+.chartR{
+  clear: both;
+  text-align: center;
+  width: 1000px;
+  height: 550px;
+  border: 1px solid royalblue;
+  box-shadow: 3px 3px 3px grey;
+  margin-bottom: 50px;
 
 }

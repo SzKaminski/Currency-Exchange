@@ -36,7 +36,7 @@ export class ExchangeService {
         'Content-Type': 'application/json'
       })
     })
-  }
+  }////localhost:8080/historicalChart
 
 
   postJSON(curries: Curries): Observable<Curries> {
