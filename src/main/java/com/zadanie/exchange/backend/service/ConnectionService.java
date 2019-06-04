@@ -52,7 +52,7 @@ public class ConnectionService {
         return scanner.nextLine();
     }
 
-    public static String getStringByCurrencies(String firstCurrency, String secondCurrency) throws IOException {
+    private static String getStringByCurrencies(String firstCurrency, String secondCurrency, boolean isForChart) {
         StringBuilder sb = new StringBuilder()
                 .append("https://www.alphavantage.co/query?function=")
                 .append("CURRENCY_EXCHANGE_RATE")
@@ -62,19 +62,18 @@ public class ConnectionService {
                 .append(secondCurrency)
                 .append("&apikey=KVIBWDX90RUCR3PW");
 
-        return sb.toString();
-    }
-    public static String getStringForChart(String firstCurrency, String secondCurrency){
-        StringBuilder sb = new StringBuilder()
-                .append("https://www.alphavantage.co/query?function=")
-                .append("FX_DAILY")
-                .append("&from_symbol=")
-                .append(firstCurrency)
-                .append("&to_symbol=")
-                .append(secondCurrency)
-                .append("&outputsize=full&apikey=KVIBWDX90RUCR3PW");
-
-        return sb.toString();
+        if (!isForChart) {
+            return sb.toString();
+        } else {
+            sb.replace(43, 123, "")
+                    .append("FX_DAILY")
+                    .append("&from_symbol=")
+                    .append(firstCurrency)
+                    .append("&to_symbol=")
+                    .append(secondCurrency)
+                    .append("&apikey=KVIBWDX90RUCR3PW");
+            return sb.toString();
+        }
     }
 
     public String getRealtimeCurrencyExchangeRate(Currencies currencies, String objFromJson, String key) {
@@ -82,7 +81,7 @@ public class ConnectionService {
         try {
             String firstCurrency = currencies.getFirstCur();
             String secondCurrency = currencies.getSecondCur();
-            URL obj = new URL(getStringByCurrencies(firstCurrency, secondCurrency));
+            URL obj = new URL(getStringByCurrencies(firstCurrency, secondCurrency, false));
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
             JSONObject obj_JSONObject = getJsonObject(obj, con);
             JSONObject realtime_currency_exchange_rate = obj_JSONObject.getJSONObject(objFromJson);
@@ -119,7 +118,7 @@ public class ConnectionService {
         try {
             String firstCurrency = currencies.getFirstCur();
             String secondCurrency = currencies.getSecondCur();
-            URL obj = new URL(getStringForChart(firstCurrency,secondCurrency));
+            URL obj = new URL(getStringByCurrencies(firstCurrency, secondCurrency, true));
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
             JSONObject obj_JSONObject = getJsonObject(obj, con);
             JSONObject realtime_currency_exchange_rate = obj_JSONObject.getJSONObject("Time Series FX (Daily)");
