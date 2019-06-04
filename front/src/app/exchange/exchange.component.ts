@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ExchangeService} from "../shared/exchange/exchange.service";
 import {Chart} from 'chart.js';
+import DateTimeFormat = Intl.DateTimeFormat;
 
 @Component({
   selector: 'app-exchange',
@@ -55,6 +56,7 @@ export class ExchangeComponent implements OnInit {
   public firstCurrency: string;
   public secondCurrency: string;
   public rateResponse: Curries;
+  public chartData: object;
 
   setFirstCurrency(value: string) {
     this.firstCurrency = value;
@@ -83,8 +85,8 @@ export class ExchangeComponent implements OnInit {
       secondCur: this.secondCurrency,
     };
     this.exchangeService.postJsonForChart(this.curries).subscribe(data => {
-      this.rateResponse = data;
-      console.log(this.rateResponse);
+      this.chartData = data;
+      console.log(this.chartData);
     });
   }
 }

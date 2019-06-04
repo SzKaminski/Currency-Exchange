@@ -43,7 +43,7 @@ export class ExchangeService {
         'Content-Type': 'application/json'
       })
     })
-  }////localhost:8080/historicalChart
+  }
 }
 
 
