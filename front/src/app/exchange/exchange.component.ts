@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ExchangeService} from "../shared/exchange/exchange.service";
 import {Chart} from 'chart.js';
-import DateTimeFormat = Intl.DateTimeFormat;
+
 
 @Component({
   selector: 'app-exchange',
@@ -11,6 +11,8 @@ import DateTimeFormat = Intl.DateTimeFormat;
 export class ExchangeComponent implements OnInit {
   public currencies: Set<any>;
   private curries: Curries;
+  private timeValue: string;
+  private rateValue: string;
 
   constructor(public exchangeService: ExchangeService) {
   }
@@ -22,13 +24,13 @@ export class ExchangeComponent implements OnInit {
     });
 
 
-    this.LineChart = new Chart('lineChart',{
+    this.LineChart = new Chart('lineChart', {
       type: 'line',
 
       data: {
-        labels: ["Jan","Feb","March"],
+        labels: ["un","de","fi","ned"],
         datasets: [{
-          data: [9, 4, 14],
+          data: [0,1,2,3],
           lineTension: 0.2,
           borderColor: "red",
           borderWidth: 1
@@ -36,12 +38,12 @@ export class ExchangeComponent implements OnInit {
       },
       options: {
         title: {
-          text:"line",
-          display:true
+          text: "line",
+          display: true
         },
-        scales:{
-          yAxes:[{
-            ticks:{
+        scales: {
+          yAxes: [{
+            ticks: {
               beginAtZero: true
             }
           }]
@@ -56,7 +58,8 @@ export class ExchangeComponent implements OnInit {
   public firstCurrency: string;
   public secondCurrency: string;
   public rateResponse: Curries;
-  public chartData: object;
+  public chartData: ChartData;
+
 
   setFirstCurrency(value: string) {
     this.firstCurrency = value;
@@ -66,7 +69,6 @@ export class ExchangeComponent implements OnInit {
   setSecondCurrency(value: string) {
     this.secondCurrency = value;
   }
-
 
   save() {
     this.curries = {
@@ -79,14 +81,53 @@ export class ExchangeComponent implements OnInit {
     });
   }
 
+  private chartArray: Array<ChartData>;
+  private chartMap = new Map();
+
   getChartData() {
     this.curries = {
       firstCur: this.firstCurrency,
       secondCur: this.secondCurrency,
     };
     this.exchangeService.postJsonForChart(this.curries).subscribe(data => {
-      this.chartData = data;
-      console.log(this.chartData);
+      this.chartArray = JSON.parse(JSON.stringify(data));
+      console.log(this.chartArray.push(new class implements ChartData {
+        dateTime: string;
+        highRate: string;
+      }));
+
+      for (let entry of this.chartArray) {
+        console.log(entry.highRate);
+        this.chartMap.set(entry.dateTime, entry.highRate);
+      }
+      this.LineChart = new Chart('lineChart', {
+        type: 'line',
+
+        data: {
+          labels: [this.chartMap.forEach((value: string, key: string)=> key.valueOf())],
+          datasets: [{
+            data: [this.chartMap.forEach((value: string, key: string)=> value.valueOf())],
+            lineTension: 0.2,
+            borderColor: "red",
+            borderWidth: 1
+          }]
+        },
+        options: {
+          title: {
+            text: "line",
+            display: true
+          },
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      })
+
+
     });
   }
 }
@@ -97,3 +138,11 @@ export interface Curries {
   secondCur: string;
 
 }
+
+export interface ChartData {
+
+  dateTime: string;
+  highRate: string;
+
+}
+
