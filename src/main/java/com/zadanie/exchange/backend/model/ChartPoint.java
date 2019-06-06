@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class ChartPoint {
 
     private String dateTime;
-    private Object highRate;
+    private String highRate;
 
     public String getDateTime() {
         return dateTime;
@@ -16,11 +16,11 @@ public class ChartPoint {
         this.dateTime = dateTime;
     }
 
-    public Object getHighRate() {
+    public String getHighRate() {
         return highRate;
     }
 
-    public void setHighRate(Object highRate) {
+    public void setHighRate(String highRate) {
         this.highRate = highRate;
     }
 }

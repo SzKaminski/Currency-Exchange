@@ -71,6 +71,7 @@ public class ConnectionService {
                     .append(firstCurrency)
                     .append("&to_symbol=")
                     .append(secondCurrency)
+                    .append("&outputsize=full")
                     .append("&apikey=KVIBWDX90RUCR3PW");
             return sb.toString();
         }
@@ -127,12 +128,10 @@ public class ConnectionService {
             realtime_currency_exchange_rate.toMap().forEach((x, y) -> {
                 ChartPoint cp = new ChartPoint();
                 cp.setDateTime(x);
-                cp.setHighRate(y);
+                String highY = y.toString().replaceAll("[^\\d.]+|\\.(?!\\d)", "").substring(1,6);
+                cp.setHighRate(highY);
                 chartpoints.add(cp);
             });
-            /*
-                exchange_rateString = jsonObject.getString("2. high");
-            */
 
             return chartpoints;
         } catch (Exception e) {
