@@ -11,8 +11,6 @@ import {Chart} from 'chart.js';
 export class ExchangeComponent implements OnInit {
   public currencies: Set<any>;
   private curries: Curries;
-  private timeValue: string;
-  private rateValue: string;
 
   constructor(public exchangeService: ExchangeService) {
   }
@@ -23,19 +21,8 @@ export class ExchangeComponent implements OnInit {
       console.log()
     });
 
-
     this.LineChart = new Chart('lineChart', {
       type: 'line',
-
-      data: {
-        labels: ["un","de","fi","ned"],
-        datasets: [{
-          data: [0,1,2,3],
-          lineTension: 0.2,
-          borderColor: "red",
-          borderWidth: 1
-        }]
-      },
       options: {
         title: {
           text: "line",
@@ -54,12 +41,13 @@ export class ExchangeComponent implements OnInit {
 
   LineChart = [];
 
+  chartDateTime = [];
+  chartHighRate = [];
+
 
   public firstCurrency: string;
   public secondCurrency: string;
   public rateResponse: Curries;
-  public chartData: ChartData;
-
 
   setFirstCurrency(value: string) {
     this.firstCurrency = value;
@@ -77,12 +65,13 @@ export class ExchangeComponent implements OnInit {
     };
     this.exchangeService.postJSON(this.curries).subscribe(data => {
       this.rateResponse = data;
-      console.log(this.rateResponse);
+      if (this.rateResponse != null){
+        this.getChartData();
+      }
     });
   }
 
   private chartArray: Array<ChartData>;
-  private chartMap = new Map();
 
   getChartData() {
     this.curries = {
@@ -91,22 +80,19 @@ export class ExchangeComponent implements OnInit {
     };
     this.exchangeService.postJsonForChart(this.curries).subscribe(data => {
       this.chartArray = JSON.parse(JSON.stringify(data));
-      console.log(this.chartArray.push(new class implements ChartData {
-        dateTime: string;
-        highRate: string;
-      }));
 
       for (let entry of this.chartArray) {
-        console.log(entry.highRate);
-        this.chartMap.set(entry.dateTime, entry.highRate);
+        this.chartDateTime.push(entry.dateTime);
+        this.chartHighRate.push(entry.highRate);
       }
+
       this.LineChart = new Chart('lineChart', {
         type: 'line',
 
         data: {
-          labels: [this.chartMap.forEach((value: string, key: string)=> key.valueOf())],
+          labels: this.chartDateTime,
           datasets: [{
-            data: [this.chartMap.forEach((value: string, key: string)=> value.valueOf())],
+            data: this.chartHighRate,
             lineTension: 0.2,
             borderColor: "red",
             borderWidth: 1
@@ -126,8 +112,6 @@ export class ExchangeComponent implements OnInit {
           }
         }
       })
-
-
     });
   }
 }
