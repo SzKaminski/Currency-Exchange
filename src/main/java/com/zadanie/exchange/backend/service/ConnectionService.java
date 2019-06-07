@@ -14,6 +14,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -91,7 +93,7 @@ public class ConnectionService {
             return exchange_rateString;
 
         } catch (Exception e) {
-            // TODO: handle exception
+           e.printStackTrace();
         }
         return exchange_rateString;
     }
@@ -133,9 +135,29 @@ public class ConnectionService {
                 chartpoints.add(cp);
             });
 
+            chartpoints.sort((o1, o2) -> {
+                Date formatO1;
+                Date formatO2;
+                try {
+                    formatO1 = new SimpleDateFormat("yyyy-MM-dd").parse(o1.getDateTime());
+                    formatO2 = new SimpleDateFormat("yyyy-MM-dd").parse(o2.getDateTime());
+
+                    if (formatO1.before(formatO2)) {
+                        return -1;
+                    } else if (formatO1.after(formatO2)) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            });
+
             return chartpoints;
         } catch (Exception e) {
-            // TODO: handle exception
+            e.printStackTrace();
         }
 
         return null;

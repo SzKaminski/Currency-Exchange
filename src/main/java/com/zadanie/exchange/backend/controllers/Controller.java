@@ -14,8 +14,13 @@ import java.util.Map;
 @RestController
 public class Controller {
 
-    @Autowired
+    private final
     ConnectionService connectionService;
+
+    @Autowired
+    public Controller(ConnectionService connectionService) {
+        this.connectionService = connectionService;
+    }
 
     @GetMapping("/obj")
     @CrossOrigin(origins = "http://localhost:4200")
