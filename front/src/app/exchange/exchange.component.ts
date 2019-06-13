@@ -24,10 +24,6 @@ export class ExchangeComponent implements OnInit {
     this.LineChart = new Chart('lineChart', {
       type: 'line',
       options: {
-        title: {
-          text: "line",
-          display: true
-        },
         scales: {
           yAxes: [{
             ticks: {
@@ -99,10 +95,6 @@ export class ExchangeComponent implements OnInit {
           }]
         },
         options: {
-          title: {
-            text: "line",
-            display: true
-          },
           scales: {
             yAxes: [{
               ticks: {

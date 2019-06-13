@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zadanie.exchange.backend.model.ChartPoint;
 import com.zadanie.exchange.backend.model.Currencies;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -21,9 +22,15 @@ import java.util.*;
 @Service
 public class ConnectionService {
 
+    @Value("${apikey}")
+    static String apikey;
+
+    @Value("${apid}")
+    static String apId;
+
     public Map getValuesMap() throws IOException {
         String text = getTextFromURL(
-                new URL("https://openexchangerates.org/api/latest.json?app_id=2885673c4858427abcacbe349a582fbc&prettyprint=0")
+                new URL("https://openexchangerates.org/api/latest.json?app_id="+apId+"&prettyprint=0")
         );
 
         Map<String, Object> jsonFileAsMap = new ObjectMapper().readValue(text, new TypeReference<Map<String, Object>>() {
@@ -49,7 +56,7 @@ public class ConnectionService {
                 .append(firstCurrency)
                 .append("&to_currency=")
                 .append(secondCurrency)
-                .append("&apikey=KVIBWDX90RUCR3PW");
+                .append(apikey);
 
         if (!isForChart) {
             return sb.toString();
@@ -61,7 +68,7 @@ public class ConnectionService {
                     .append("&to_symbol=")
                     .append(secondCurrency)
                     .append("&outputsize=full")
-                    .append("&apikey=KVIBWDX90RUCR3PW");
+                    .append(apikey);
             return sb.toString();
         }
     }
